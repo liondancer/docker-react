@@ -1,0 +1,19 @@
+version: '3'    # docker compose version
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports: 
+      - "3000:3000"
+    volumes:
+      - /app/node_modules   # do not try to map to this directory in container
+      - .:/app              # current directory : app directory
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:      # Used as references to files OUTSIDE the container
+      - /app/node_modules   # Dont rety to map anything to /app/node_modules within the container. Leave it alone
+      - .:/app    # map everything from this directory (.) to the app directory in the container
+    command: ["npm", "run", "test"]
